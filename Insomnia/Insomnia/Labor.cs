@@ -13,6 +13,11 @@ namespace Insomnia
         /// Processes to look for
         /// </summary>
         public string[] TargetProcesses;
+
+        public void Labor()
+        {
+            
+        }
     }
 
     public static class ProcessChecker

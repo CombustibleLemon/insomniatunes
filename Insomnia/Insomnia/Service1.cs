@@ -13,7 +13,6 @@ namespace Insomnia
 {
     public partial class Service1 : ServiceBase
     {
-        private ManualResetEvent _shutdownEvent = new ManualResetEvent(false);
         private Thread _thread;
         private Prole _laborer;
 
@@ -26,25 +25,17 @@ namespace Insomnia
         {
             // Create laborer to perform loop
             _laborer = new Prole();
+            _laborer.TargetProcesses = new string[] {"iTunes.exe"};
 
             // Create seperate thread for execution loop
-            _thread = new Thread(WorkerThreadFunc);
+            _thread = new Thread(_laborer.Labor);
             _thread.Name = "Laborer Thread";
             _thread.IsBackground = true;
             _thread.Start();
         }
 
-        private void WorkerThreadFunc()
-        {
-            while (!_shutdownEvent.WaitOne(0))
-            {
-
-            }
-        }
-
         protected override void OnStop()
         {
-            _shutdownEvent.Set();
             if (!_thread.Join(3000)) // give the thread 3 seconds to stop
             { 
                 _thread.Abort();
