@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace Insomnia
 {
+    public class Prole
+    {
+        
+    }
+
     public static class ProcessChecker
     {
         /// <summary>
