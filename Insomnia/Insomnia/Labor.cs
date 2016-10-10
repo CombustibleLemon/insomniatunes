@@ -9,7 +9,10 @@ namespace Insomnia
 {
     public class Prole
     {
-        
+        /// <summary>
+        /// Processes to look for
+        /// </summary>
+        public string[] TargetProcesses;
     }
 
     public static class ProcessChecker

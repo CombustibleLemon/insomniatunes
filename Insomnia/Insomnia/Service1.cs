@@ -15,6 +15,7 @@ namespace Insomnia
     {
         private ManualResetEvent _shutdownEvent = new ManualResetEvent(false);
         private Thread _thread;
+        private Prole _laborer;
 
         public Service1()
         {
@@ -23,8 +24,12 @@ namespace Insomnia
 
         protected override void OnStart(string[] args)
         {
+            // Create laborer to perform loop
+            _laborer = new Prole();
+
+            // Create seperate thread for execution loop
             _thread = new Thread(WorkerThreadFunc);
-            _thread.Name = "Worker Thread";
+            _thread.Name = "Laborer Thread";
             _thread.IsBackground = true;
             _thread.Start();
         }
