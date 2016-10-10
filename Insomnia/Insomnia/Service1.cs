@@ -24,18 +24,23 @@ namespace Insomnia
         protected override void OnStart(string[] args)
         {
             // Create laborer to perform loop
-            _laborer = new Prole();
-            _laborer.TargetProcesses = new string[] {"iTunes.exe"};
+            _laborer = new Prole
+            {
+                TargetProcesses = new string[] {"iTunes.exe"}
+            };
 
             // Create seperate thread for execution loop
-            _thread = new Thread(_laborer.Labor);
-            _thread.Name = "Laborer Thread";
-            _thread.IsBackground = true;
+            _thread = new Thread(_laborer.Labor)
+            {
+                Name = "Laborer Thread",
+                IsBackground = true
+            };
             _thread.Start();
         }
 
         protected override void OnStop()
         {
+            _laborer.ShutdownEvent.Set();
             if (!_thread.Join(3000)) // give the thread 3 seconds to stop
             { 
                 _thread.Abort();

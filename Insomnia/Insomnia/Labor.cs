@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Insomnia
@@ -10,11 +11,35 @@ namespace Insomnia
     public class Prole
     {
         /// <summary>
-        /// Processes to look for
+        /// Processes to look for, case insensitive
         /// </summary>
         public string[] TargetProcesses;
 
+        /// <summary>
+        /// Used to trigger a shutdown
+        /// </summary>
+        public ManualResetEvent ShutdownEvent;
+
+        public Prole()
+        {
+            ShutdownEvent = new ManualResetEvent(false);
+        }
+
         public void Labor()
+        {
+            while (!ShutdownEvent.WaitOne(0)) // Go until ShutdownEvent says stop
+            {
+                foreach (string process in TargetProcesses)
+                {
+                    if (ProcessChecker.IsOpen(process))
+                    {
+                        StopSleep();
+                    }
+                }
+            }
+        }
+
+        private void StopSleep()
         {
             
         }
