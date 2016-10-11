@@ -35,7 +35,10 @@ namespace Insomnia
                 {
                     if (ProcessChecker.IsOpen(process))
                     {
-                        StopSleep();
+                        if (ProcessChecker.IsCharging)
+                        {
+                            StopSleep();
+                        }
                     }
                 }
             }
@@ -69,10 +72,6 @@ namespace Insomnia
         /// <summary>
         /// Tests if computer is plugged into power
         /// </summary>
-        /// <returns>Returns <code>true</code> if plugged into external power</returns>
-        public static bool IsCharging()
-        {
-            return (SystemInformation.PowerStatus.PowerLineStatus == PowerLineStatus.Online);
-        }
+        public static bool IsCharging => (SystemInformation.PowerStatus.PowerLineStatus == PowerLineStatus.Online);
     }
 }
