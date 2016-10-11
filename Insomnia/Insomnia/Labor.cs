@@ -6,7 +6,7 @@ using static PInvoke.Kernel32;
 
 namespace Insomnia
 {
-    public class Prole
+    public class Prole : IDisposable
     {
         /// <summary>
         /// Processes to look for, case insensitive
