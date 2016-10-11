@@ -1,22 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.ServiceProcess;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using PInvoke;
 using static PInvoke.Kernel32;
 
 namespace Insomnia
 {
     public class Prole
     {
-        private uint m_previousExecutionState;
-
         /// <summary>
         /// Processes to look for, case insensitive
         /// </summary>
@@ -63,6 +54,22 @@ namespace Insomnia
         {
             SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS);
         }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // dispose managed resources
+                ShutdownEvent.Close();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
     }
 
     public static class ProcessChecker
