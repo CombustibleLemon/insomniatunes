@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.ServiceProcess;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using static PInvoke.Kernel32;
 
 namespace Insomnia
 {
-    public class Prole
+    public class Prole : IDisposable
     {
         /// <summary>
         /// Processes to look for, case insensitive
@@ -42,12 +38,38 @@ namespace Insomnia
                     }
                 }
             }
+
+            AllowSleep();
         }
 
         private void StopSleep()
         {
-            
+            SetThreadExecutionState(
+                EXECUTION_STATE.ES_CONTINUOUS |
+                EXECUTION_STATE.ES_SYSTEM_REQUIRED |
+                EXECUTION_STATE.ES_AWAYMODE_REQUIRED);
         }
+
+        public void AllowSleep()
+        {
+            SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // dispose managed resources
+                ShutdownEvent.Close();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
     }
 
     public static class ProcessChecker

@@ -41,8 +41,9 @@ namespace Insomnia
         protected override void OnStop()
         {
             _laborer.ShutdownEvent.Set();
-            if (!_thread.Join(3000)) // give the thread 3 seconds to stop
+            if (!_thread.Join(1000)) // give the thread 1 second to stop
             { 
+                _laborer.AllowSleep();
                 _thread.Abort();
             }
         }
