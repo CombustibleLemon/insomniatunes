@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PInvoke;
+using static PInvoke.Kernel32;
 
 namespace Insomnia
 {
@@ -51,18 +53,15 @@ namespace Insomnia
 
         private void StopSleep()
         {
-            m_previousExecutionState = NativeMethods.SetThreadExecutionState(
-                NativeMethods.ES_CONTINUOUS | NativeMethods.ES_SYSTEM_REQUIRED);
-
-            if (0 == m_previousExecutionState)
-            {
-                throw new Exception("NativeMethods.SetThreadExecutionState call failed");
-            }
+            SetThreadExecutionState(
+                EXECUTION_STATE.ES_CONTINUOUS |
+                EXECUTION_STATE.ES_SYSTEM_REQUIRED |
+                EXECUTION_STATE.ES_AWAYMODE_REQUIRED);
         }
 
         public void AllowSleep()
         {
-            NativeMethods.SetThreadExecutionState(m_previousExecutionState);
+            SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS);
         }
     }
 
@@ -89,14 +88,5 @@ namespace Insomnia
         /// Tests if computer is plugged into power
         /// </summary>
         public static bool IsCharging => (SystemInformation.PowerStatus.PowerLineStatus == PowerLineStatus.Online);
-    }
-
-    internal static class NativeMethods
-    {
-        // Import SetThreadExecutionState Win32 API and necessary flags
-        [DllImport("kernel32.dll")]
-        public static extern uint SetThreadExecutionState(uint esFlags);
-        public const uint ES_CONTINUOUS = 0x80000000;
-        public const uint ES_SYSTEM_REQUIRED = 0x00000001;
     }
 }
