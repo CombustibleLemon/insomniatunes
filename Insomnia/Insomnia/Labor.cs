@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
@@ -12,6 +13,8 @@ namespace Insomnia
 {
     public class Prole
     {
+        private uint m_previousExecutionState;
+
         /// <summary>
         /// Processes to look for, case insensitive
         /// </summary>
@@ -42,11 +45,24 @@ namespace Insomnia
                     }
                 }
             }
+
+            AllowSleep();
         }
 
         private void StopSleep()
         {
-            
+            m_previousExecutionState = NativeMethods.SetThreadExecutionState(
+                NativeMethods.ES_CONTINUOUS | NativeMethods.ES_SYSTEM_REQUIRED);
+
+            if (0 == m_previousExecutionState)
+            {
+                throw new Exception("NativeMethods.SetThreadExecutionState call failed");
+            }
+        }
+
+        public void AllowSleep()
+        {
+            NativeMethods.SetThreadExecutionState(m_previousExecutionState);
         }
     }
 
@@ -73,5 +89,14 @@ namespace Insomnia
         /// Tests if computer is plugged into power
         /// </summary>
         public static bool IsCharging => (SystemInformation.PowerStatus.PowerLineStatus == PowerLineStatus.Online);
+    }
+
+    internal static class NativeMethods
+    {
+        // Import SetThreadExecutionState Win32 API and necessary flags
+        [DllImport("kernel32.dll")]
+        public static extern uint SetThreadExecutionState(uint esFlags);
+        public const uint ES_CONTINUOUS = 0x80000000;
+        public const uint ES_SYSTEM_REQUIRED = 0x00000001;
     }
 }

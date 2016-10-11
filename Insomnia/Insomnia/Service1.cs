@@ -43,6 +43,7 @@ namespace Insomnia
             _laborer.ShutdownEvent.Set();
             if (!_thread.Join(3000)) // give the thread 3 seconds to stop
             { 
+                _laborer.AllowSleep();
                 _thread.Abort();
             }
         }
