@@ -38,6 +38,8 @@
             // 
             // serviceInstaller1
             // 
+            this.serviceInstaller1.Description = "Prevents sleep when iTunes is running";
+            this.serviceInstaller1.DisplayName = "InsomniaTunes";
             this.serviceInstaller1.ServiceName = "Insomnia";
             this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 
