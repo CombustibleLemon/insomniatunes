@@ -12,6 +12,8 @@ namespace Insomnia
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        // Satisfies rule: MarkWindowsFormsEntryPointsWithStaThread.
+        [STAThread]
         static void Main()
         {
             ServiceBase[] ServicesToRun;
