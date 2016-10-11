@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Insomnia
 {
@@ -62,6 +64,15 @@ namespace Insomnia
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Tests if computer is plugged into power
+        /// </summary>
+        /// <returns>Returns <code>true</code> if plugged into external power</returns>
+        public static bool IsCharging()
+        {
+            return (SystemInformation.PowerStatus.PowerLineStatus == PowerLineStatus.Online);
         }
     }
 }
