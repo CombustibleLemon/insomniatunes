@@ -48,9 +48,9 @@ namespace Insomnia
     public static class ProcessChecker
     {
         /// <summary>
-        /// Checks if there exists a currently-running process with some name, case insensitive
+        /// Checks if there exists a currently-running process with some name
         /// </summary>
-        /// <param name="name">Name of process to look for</param>
+        /// <param name="name">Name of process to look for, case insensitive</param>
         public static bool IsOpen(string name)
         {
             foreach (Process clsProcess in Process.GetProcesses())
